@@ -1,5 +1,4 @@
 // gobal variables
-
 const url = 'https://cheaderthecoder.github.io/5-Letter-words/words.txt';
 let wordbank = []
 
@@ -9,6 +8,7 @@ let game = {
     idx:0,
     Board: [],
     over:false,
+    win: false,
     keypad: {},
     validguess: true,
     reveal: false
@@ -33,9 +33,10 @@ function getWords(callback) {
 }
 
 // setup and draw functions
-
 function setup() {
     createCanvas(600, 600);
+    textAlign(CENTER, CENTER)
+    rectMode(CENTER)
 
     getWords(() =>{
 
@@ -45,11 +46,11 @@ function setup() {
         game.attempt = 0
         game.idx = 0
         game.over = false
+        game.win = false
         game.keypad = {}
         game.validguess = true
         game.reveal = false
         for(let i=0; i<5; i++){
-
             game.Board[i] = []
             for(let j=0; j<5; j++){
                 game.Board[i][j] = {
@@ -62,18 +63,23 @@ function setup() {
 }
 
 function draw() {
-    background(18, 18, 19);
-    drawBoard()
-    drawKeyboard()
+    background(18, 18, 19)
+
+    if(game.over === true){
+        drawGameOver()
+    }else{
+        drawBoard()
+        drawKeyboard()
+    } 
 }
 
 function drawBoard(){
     let boxSize = 60
-    let currY = 50
+    let currY = 80
     let boxGap = 10
 
     for (let i =0; i<5; i++){
-        let currX = 125
+        let currX = 150
         for(let j=0; j<5; j++){
 
             if(game.Board[i][j].cell === 'correct'){
@@ -98,7 +104,6 @@ function drawBoard(){
 
                 }
                 
-               
                 strokeWeight(2)
             }
 
@@ -108,7 +113,7 @@ function drawBoard(){
             noStroke()
             textSize(36)
             textStyle(BOLD)
-            text(game.Board[i][j].letter.toUpperCase(), currX +20, currY +42)
+            text(game.Board[i][j].letter.toUpperCase(), currX , currY )
 
             currX += boxSize
             currX += boxGap
@@ -122,17 +127,18 @@ function drawKeyboard(){
     let keys = [
         ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
         ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-        ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<=']
+        ['Z', 'X', 'C', 'V', 'B', 'N', 'M',]
     ]
 
-    let startY = 410
+    let y = 440
     let keyHeight = 50
-    let keyGap = 10
+    let keyGap = 8
 
     for (let i =0; i<keys.length; i++){
 
-        let startX = 30
-        if (i=== 1){startX = 50}
+        let x = 80
+        if (i=== 1){x = 100}
+        if(i===2){x = 150}
 
         let row = keys[i]
 
@@ -157,23 +163,50 @@ function drawKeyboard(){
             }
             
             noStroke()
-            rect(startX, startY, keyWidth, keyHeight, 5)
+            rect(x, y, keyWidth, keyHeight, 5)
 
             // key text
             fill(248,248,248)
             textSize(18)
             textStyle(BOLD)
-            text(key, startX + 10, startY + keyHeight/2 + 8)
+            text(key, x , y)
 
-            startX += keyWidth
-            startX += keyGap   
+            x += keyWidth
+            x += keyGap
         }
-        startY += 60
+        y += 60
     }
 }
 
-// input handling
+function drawGameOver(){
+    let txt = ''
 
+    if(game.win === true){
+        txt = 'Congratulations!'
+    }else{
+        txt = 'Better luck next time'
+    }
+
+    fill(248,248,248)
+    noStroke()
+    textSize(42)
+    text(txt, 300, 200)
+
+    fill(colours.green)
+    noStroke()
+    rect(300, 300 , 150, 60, 5)
+
+    fill(248,248,248)
+    textSize(38)
+    textStyle(BOLD)
+    text(game.word, 300, 300)
+
+    textSize(18)
+    text("Press ENTER to start a new game", 300, 400)
+    text("BACKSPACE to look at your puzzle", 300, 430)
+}
+
+// input handling
 function keyPressed(){
     if (game.over === false){
         game.validguess = true
@@ -197,7 +230,6 @@ function keyPressed(){
     }
     else{
         if (keyCode === ENTER){
-            // restart the game
             setup()
         }
     }   
@@ -259,6 +291,7 @@ function enterGuess(){
         game.validguess = true
             wordle()
             if(guess === game.word){
+                game.win = true
                 game.over = true
                 return
             }
@@ -321,7 +354,6 @@ function wordle(){
         console.log(wordArr)
     }  
 }
-
 
 // helper functions
 function isKey(key){
