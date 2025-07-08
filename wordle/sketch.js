@@ -42,7 +42,6 @@ function setup() {
 
         let randomIndex = Math.floor(Math.random() * wordbank.length)
         game.word = wordbank[randomIndex];
-        console.log(game.word)
         game.attempt = 0
         game.idx = 0
         game.over = false
@@ -75,11 +74,11 @@ function draw() {
 
 function drawBoard(){
     let boxSize = 60
-    let currY = 80
+    let y = 80
     let boxGap = 10
 
     for (let i =0; i<5; i++){
-        let currX = 150
+        let x = 150
         for(let j=0; j<5; j++){
 
             if(game.Board[i][j].cell === 'correct'){
@@ -107,19 +106,19 @@ function drawBoard(){
                 strokeWeight(2)
             }
 
-            square(currX, currY, boxSize)
+            square(x, y, boxSize)
 
             fill(248,248,248)
             noStroke()
             textSize(36)
             textStyle(BOLD)
-            text(game.Board[i][j].letter.toUpperCase(), currX , currY )
+            text(game.Board[i][j].letter.toUpperCase(), x , y )
 
-            currX += boxSize
-            currX += boxGap
+            x += boxSize
+            x += boxGap
         }
-        currY += boxSize
-        currY += boxGap
+        y += boxSize
+        y += boxGap
     }
 }
 
@@ -221,7 +220,7 @@ function keyPressed(){
             return
         }
         else if(key.toUpperCase().match(/^[A-Z]$/)){
-            typeLetter(key)
+            typeLetter(key.toLowerCase())
             return
         }
         else{
@@ -351,7 +350,6 @@ function wordle(){
             
             game.keypad[game.Board[attempt][i].letter] = 'absent'
         }
-        console.log(wordArr)
     }  
 }
 
