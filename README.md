@@ -12,7 +12,7 @@ Built with **JavaScript**
   - Yellow: Incorrect position
   - Gray: Letter is not found in the word
 
-  You only get 5 tries instead of 6, but you can replay as much as you like :)
+- You only get 5 tries instead of 6, but you can replay as much as you like :)
 
 [Try it out now](https://maudeux.github.io/kwordle/wordle/) 
 
