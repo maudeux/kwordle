@@ -16,5 +16,5 @@ You only get 5 tries instead of 6, but you can replay as much as you like :)
 
 [Try it out now! ](https://maudeux.github.io/kwordle/wordle/) 
 
-(just refresh if you see a blank canvas)
+(please refresh if you see a blank canvas... I am still working on it)
 
