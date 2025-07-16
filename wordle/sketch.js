@@ -1,12 +1,12 @@
-// gobal variables
+
 const url = 'https://cheaderthecoder.github.io/5-Letter-words/words.txt';
 let wordbank = []
 
 let game = {
     word :'',
-    attempt: 0,
-    idx:0,
-    Board: [],
+    row: 0,
+    col:0,
+    board: [],
     over:false,
     win: false,
     keypad: {},
@@ -42,17 +42,17 @@ function setup() {
 
         let randomIndex = Math.floor(Math.random() * wordbank.length)
         game.word = wordbank[randomIndex];
-        game.attempt = 0
-        game.idx = 0
+        game.row = 0
+        game.col = 0
         game.over = false
         game.win = false
         game.keypad = {}
         game.validguess = true
         game.reveal = false
         for(let i=0; i<5; i++){
-            game.Board[i] = []
+            game.board[i] = []
             for(let j=0; j<5; j++){
-                game.Board[i][j] = {
+                game.board[i][j] = {
                     letter: '',
                     cell:'empty'
                     }
@@ -67,12 +67,12 @@ function draw() {
     if(game.over === true){
         drawGameOver()
     }else{
-        drawBoard()
+        drawboard()
         drawKeyboard()
     } 
 }
 
-function drawBoard(){
+function drawboard(){
     let boxSize = 60
     let y = 80
     let boxGap = 10
@@ -81,22 +81,22 @@ function drawBoard(){
         let x = 150
         for(let j=0; j<5; j++){
 
-            if(game.Board[i][j].cell === 'correct'){
+            if(game.board[i][j].cell === 'correct'){
                 fill(colours.green)
                 noStroke()
 
-            }else if(game.Board[i][j].cell === 'present'){
+            }else if(game.board[i][j].cell === 'present'){
                 fill(colours.yellow)
                 noStroke()
 
-            }else if(game.Board[i][j].cell === 'absent'){
+            }else if(game.board[i][j].cell === 'absent'){
                 fill(colours.grey)
                 noStroke()
                 
             }else{ 
                 // empty or occupied
                 fill(18,18,19)
-                if(game.validguess === false && game.attempt === i){
+                if(game.validguess === false && game.row === i){
                     stroke(colours.red)
                 }else{
                     stroke(colours.grey)
@@ -112,7 +112,7 @@ function drawBoard(){
             noStroke()
             textSize(36)
             textStyle(BOLD)
-            text(game.Board[i][j].letter.toUpperCase(), x , y )
+            text(game.board[i][j].letter.toUpperCase(), x , y )
 
             x += boxSize
             x += boxGap
@@ -143,7 +143,7 @@ function drawKeyboard(){
 
         for(let key of row){
 
-            let keyWidth = getKeyWidth(key)
+            let keyWidth = 40
 
             if (isKey(key)){
                 if(key.toLowerCase() in game.keypad){
@@ -235,52 +235,52 @@ function keyPressed(){
 }
 
 function typeLetter(key){
-    let row = game.attempt
-    let col = game.idx
+    let row = game.row
+    let col = game.col
    
     if (col === 4){
-        if(game.Board[row][col].cell === 'occupied'){
+        if(game.board[row][col].cell === 'occupied'){
 
             return
         }else{
-        game.Board[row][col].letter = key
-        game.Board[row][col].cell = 'occupied'
+        game.board[row][col].letter = key
+        game.board[row][col].cell = 'occupied'
         }
     }else{
-        game.Board[row][col].letter = key
-        game.Board[row][col].cell = 'occupied'
-        game.idx += 1
+        game.board[row][col].letter = key
+        game.board[row][col].cell = 'occupied'
+        game.col += 1
     }
 }
 
 function backspace(){
-    let row = game.attempt
-    let col = game.idx
+    let row = game.row
+    let col = game.col
     let column = col
     if (col === 0){
-        if(game.Board[row][col].cell === 'occupied'){
+        if(game.board[row][col].cell === 'occupied'){
             column = col
         }else{
             return
         }
     }else{
-        if (game.Board[row][col].cell === 'occupied'){
+        if (game.board[row][col].cell === 'occupied'){
             column = col
         }else{
             column = col -1
         }
-        game.idx -= 1
+        game.col -= 1
     }
-    game.Board[row][column].letter = ''
-    game.Board[row][column].cell = 'empty'
+    game.board[row][column].letter = ''
+    game.board[row][column].cell = 'empty'
 }
 
 function enterGuess(){
-    let attempt = game.attempt
+    let row = game.row
     let guess = ''
 
     for(let i=0; i<5; i++){
-        guess += game.Board[attempt][i].letter
+        guess += game.board[row][i].letter
     }
 
     if(guess.length != 5){
@@ -294,12 +294,12 @@ function enterGuess(){
                 game.over = true
                 return
             }
-            if(game.attempt === 4){ 
+            if(game.row === 4){ 
                 game.over = true
                 return
             } 
-            game.attempt += 1
-            game.idx = 0
+            game.row += 1
+            game.col = 0
         }
         else{
             game.validguess = false
@@ -310,24 +310,24 @@ function enterGuess(){
 function wordle(){
     let word = game.word
     let wordArr = word.split('')
-    let attempt = game.attempt
+    let row = game.row
 
     for(let i=0; i<5; i++){
-        if ( wordArr.includes(game.Board[attempt][i].letter)){
+        if ( wordArr.includes(game.board[row][i].letter)){
 
-            if (game.Board[attempt][i].letter === wordArr[i]){
-                game.Board[attempt][i].cell = 'correct'
+            if (game.board[row][i].letter === wordArr[i]){
+                game.board[row][i].cell = 'correct'
                 wordArr[i] = '*'
 
-                game.keypad[game.Board[attempt][i].letter] = 'correct'
+                game.keypad[game.board[row][i].letter] = 'correct'
                 
             }
             else {
 
                 let state = ''
-                const index = wordArr.indexOf(game.Board[attempt][i].letter)
+                const index = wordArr.indexOf(game.board[row][i].letter)
 
-                if (game.Board[attempt][index].letter === wordArr[index]){
+                if (game.board[row][index].letter === wordArr[index]){
                     state = 'absent'
 
                 }else{
@@ -338,17 +338,17 @@ function wordle(){
                     }
                 }
 
-                game.Board[attempt][i].cell = state
+                game.board[row][i].cell = state
                 
-                if(!(game.Board[attempt][i].letter in game.keypad)){
-                    game.keypad[game.Board[attempt][i].letter] = state
+                if(!(game.board[row][i].letter in game.keypad)){
+                    game.keypad[game.board[row][i].letter] = state
                 }
             }   
         }else{
             
-            game.Board[attempt][i].cell = 'absent'
+            game.board[row][i].cell = 'absent'
             
-            game.keypad[game.Board[attempt][i].letter] = 'absent'
+            game.keypad[game.board[row][i].letter] = 'absent'
         }
     }  
 }
