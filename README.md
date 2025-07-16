@@ -1,5 +1,5 @@
 Played Wordle so much, I ended up with my own version.
-Built with **JavaScript/p5.js**
+Built with **JavaScript and p5.js**
 
 ## Rules are simple 
 - Guess a 5 letter word
@@ -11,7 +11,7 @@ Built with **JavaScript/p5.js**
   - Yellow: Incorrect position
   - Gray: Letter is not found in the word
 
-You just get 5 tries instead of 6
-[Try it out now on GitHub Pages](https://maudeux.github.io/kwordle/wordle/)
+You just get 5 tries instead of 6. 
+[Try it out now on GitHub Pages](https://maudeux.github.io/kwordle/wordle/) 
 (just refresh if you see a blank canvas)
 
