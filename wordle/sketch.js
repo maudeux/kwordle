@@ -73,9 +73,9 @@ function draw() {
 }
 
 function drawboard(){
-    let boxSize = 60
+    let size = 60
     let y = 80
-    let boxGap = 10
+    let gap = 10
 
     for (let i =0; i<5; i++){
         let x = 150
@@ -106,7 +106,7 @@ function drawboard(){
                 strokeWeight(2)
             }
 
-            square(x, y, boxSize)
+            square(x, y, size)
 
             fill(248,248,248)
             noStroke()
@@ -114,11 +114,11 @@ function drawboard(){
             textStyle(BOLD)
             text(game.board[i][j].letter.toUpperCase(), x , y )
 
-            x += boxSize
-            x += boxGap
+            x += size
+            x += gap
         }
-        y += boxSize
-        y += boxGap
+        y += size
+        y += gap
     }
 }
 
@@ -130,8 +130,8 @@ function drawKeyboard(){
     ]
 
     let y = 440
-    let keyHeight = 50
-    let keyGap = 8
+    let height = 50
+    let gap = 8
 
     for (let i =0; i<keys.length; i++){
 
@@ -143,7 +143,7 @@ function drawKeyboard(){
 
         for(let key of row){
 
-            let keyWidth = 40
+            let width = 40
 
             if (isKey(key)){
                 if(key.toLowerCase() in game.keypad){
@@ -162,7 +162,7 @@ function drawKeyboard(){
             }
             
             noStroke()
-            rect(x, y, keyWidth, keyHeight, 5)
+            rect(x, y, width, height, 5)
 
             // key text
             fill(248,248,248)
@@ -170,8 +170,8 @@ function drawKeyboard(){
             textStyle(BOLD)
             text(key, x , y)
 
-            x += keyWidth
-            x += keyGap
+            x += width
+            x += gap
         }
         y += 60
     }
@@ -202,10 +202,9 @@ function drawGameOver(){
 
     textSize(18)
     text("Press ENTER to start a new game", 300, 400)
-    text("BACKSPACE to look at your puzzle", 300, 430)
+    // text("BACKSPACE to look at your puzzle", 300, 430)
 }
 
-// input handling
 function keyPressed(){
     if (game.over === false){
         game.validguess = true
@@ -306,7 +305,6 @@ function enterGuess(){
         }
 }
 
-// Logic
 function wordle(){
     let word = game.word
     let wordArr = word.split('')
@@ -353,12 +351,6 @@ function wordle(){
     }  
 }
 
-// helper functions
 function isKey(key){
     return /^[A-Z]$/.test(key)
-}
-
-function getKeyWidth(key){
-    if (key === 'ENTER' || key ==='<='){return 80}
-    else{return 40}
 }
